@@ -18,12 +18,9 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#include <err.h>
 #include <errno.h>
 #include <event.h>
 #include <fcntl.h>
-#include <getopt.h>
 #include <langinfo.h>
 #include <locale.h>
 #include <pwd.h>
@@ -192,14 +189,22 @@ main(int argc, char **argv)
 	const char	*s;
 	int		 opt, flags, keys;
 
+#if 0
 	if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
-		if (setlocale(LC_CTYPE, "") == NULL)
-			errx(1, "invalid LC_ALL, LC_CTYPE or LANG");
+#endif
+		if (setlocale(LC_CTYPE, "") == NULL) {
+			fputs("invalid LC_ALL, LC_CTYPE or LANG\n", stderr);
+			return 1;
+		}
+#if 0
 		s = nl_langinfo(CODESET);
 		if (strcasecmp(s, "UTF-8") != 0 &&
-		    strcasecmp(s, "UTF8") != 0)
-			errx(1, "need UTF-8 locale (LC_CTYPE) but have %s", s);
+		    strcasecmp(s, "UTF8") != 0) {
+			fprintf(stderr, "need UTF-8 locale (LC_CTYPE) but have %s\n", s);
+			return 1;
+		}
 	}
+#endif
 
 	setlocale(LC_TIME, "");
 	tzset();
@@ -262,12 +267,14 @@ main(int argc, char **argv)
 
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath wpath cpath flock fattr unix getpw sendfd "
-	    "recvfd proc exec tty ps", NULL) != 0)
-		err(1, "pledge");
+	    "recvfd proc exec tty ps", NULL) != 0) {
+		perror("pledge");
+		return 1;
+	}
 #endif
 
 	/*
-	 * tmux is a UTF-8 terminal, so if TMUX is set, assume UTF-8.
+	 * tmux is an UTF-8 terminal, so if TMUX is set, assume UTF-8.
 	 * Otherwise, if the user has set LC_ALL, LC_CTYPE or LANG to contain
 	 * UTF-8, it is a safe assumption that either they are using a UTF-8
 	 * terminal, or if not they know that output from UTF-8-capable
