@@ -23,15 +23,15 @@ endif
 
 # Set flags for gcc.
 if IS_GCC
-CFLAGS += -std=gnu99 -O2
+CFLAGS += -Wall -std=gnu99
 if IS_DEBUG
 CFLAGS += -g
-CFLAGS += -Wno-long-long -Wall -W -Wnested-externs -Wformat=2
+CFLAGS += -Wextra -Wnested-externs -Wformat=2
 CFLAGS += -Wmissing-prototypes -Wstrict-prototypes -Wmissing-declarations
 CFLAGS += -Wwrite-strings -Wshadow -Wpointer-arith -Wsign-compare
 CFLAGS += -Wundef -Wbad-function-cast -Winline -Wcast-align
 CFLAGS += -Wdeclaration-after-statement -Wno-pointer-sign -Wno-attributes
-CPPFLAGS += -DDEBUG
+CPPFLAGS += -D DEBUG=1
 endif
 if IS_COVERAGE
 CFLAGS += -g -O0 --coverage
