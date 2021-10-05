@@ -21,6 +21,7 @@
 #else
 #include <inttypes.h>
 #endif
+#include <stdlib.h>
 #include <string.h>
 
 #include "tmux.h"

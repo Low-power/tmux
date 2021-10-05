@@ -26,7 +26,9 @@
 #include <fnmatch.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_TERM_H
 #include <term.h>
+#endif
 
 #include "tmux.h"
 
