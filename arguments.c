@@ -36,38 +36,17 @@ struct args_entry {
 
 struct args_entry	*args_find(struct args *, u_char);
 
-RB_GENERATE(args_tree, args_entry, entry, args_cmp);
+//RB_GENERATE(args_tree, args_entry, entry, args_cmp);
 
 /* Arguments tree comparison function. */
+static
 int
 args_cmp(struct args_entry *a1, struct args_entry *a2)
 {
 	return (a1->flag - a2->flag);
 }
 
-/* Create an arguments set with no flags. */
-struct args *
-args_create(int argc, ...)
-{
-	struct args	*args;
-	va_list		 ap;
-	int		 i;
-
-	args = xcalloc(1, sizeof *args);
-
-	args->argc = argc;
-	if (argc == 0)
-		args->argv = NULL;
-	else
-		args->argv = xcalloc(argc, sizeof *args->argv);
-
-	va_start(ap, argc);
-	for (i = 0; i < argc; i++)
-		args->argv[i] = xstrdup(va_arg(ap, char *));
-	va_end(ap);
-
-	return (args);
-}
+RB_GENERATE_STATIC(args_tree, args_entry, entry, args_cmp);
 
 /* Find a flag in the arguments tree. */
 struct args_entry *
@@ -88,8 +67,12 @@ args_parse(const char *template, int argc, char **argv)
 
 	args = xcalloc(1, sizeof *args);
 
+#if HAVE_DECL_OPTRESET
 	optreset = 1;
 	optind = 1;
+#else
+	optind = 0;
+#endif
 
 	while ((opt = getopt(argc, argv, template)) != -1) {
 		if (opt < 0)

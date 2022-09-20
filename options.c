@@ -34,10 +34,6 @@ struct options {
 	struct options	*parent;
 };
 
-static int	options_cmp(struct options_entry *, struct options_entry *);
-RB_PROTOTYPE(options_tree, options_entry, entry, options_cmp);
-RB_GENERATE(options_tree, options_entry, entry, options_cmp);
-
 static void	options_free1(struct options *, struct options_entry *);
 
 static int
@@ -45,6 +41,8 @@ options_cmp(struct options_entry *o1, struct options_entry *o2)
 {
 	return (strcmp(o1->name, o2->name));
 }
+
+RB_GENERATE_STATIC(options_tree, options_entry, entry, options_cmp);
 
 struct options *
 options_create(struct options *parent)

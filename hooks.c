@@ -28,10 +28,6 @@ struct hooks {
 	struct hooks	*parent;
 };
 
-static int	hooks_cmp(struct hook *, struct hook *);
-RB_PROTOTYPE(hooks_tree, hook, entry, hooks_cmp);
-RB_GENERATE(hooks_tree, hook, entry, hooks_cmp);
-
 static struct hook	*hooks_find1(struct hooks *, const char *);
 static void		 hooks_free1(struct hooks *, struct hook *);
 static void		 hooks_emptyfn(struct cmd_q *);
@@ -41,6 +37,8 @@ hooks_cmp(struct hook *hook1, struct hook *hook2)
 {
 	return (strcmp(hook1->name, hook2->name));
 }
+
+RB_GENERATE_STATIC(hooks_tree, hook, entry, hooks_cmp);
 
 struct hooks *
 hooks_get(struct session *s)
@@ -188,6 +186,7 @@ hooks_run(struct hooks *hooks, struct client *c, struct cmd_find_state *fs,
 	return (0);
 }
 
+#if 0
 int
 hooks_wait(struct hooks *hooks, struct cmd_q *cmdq, struct cmd_find_state *fs,
     const char *fmt, ...)
@@ -224,3 +223,4 @@ hooks_wait(struct hooks *hooks, struct cmd_q *cmdq, struct cmd_find_state *fs,
 	cmdq_run(hooks_cmdq, hook->cmdlist, NULL);
 	return (0);
 }
+#endif

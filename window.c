@@ -64,29 +64,30 @@ void	window_pane_error_callback(struct bufferevent *, short, void *);
 
 struct window_pane *window_pane_choose_best(struct window_pane **, u_int);
 
-RB_GENERATE(windows, window, entry, window_cmp);
-
+static
 int
 window_cmp(struct window *w1, struct window *w2)
 {
 	return (w1->id - w2->id);
 }
 
-RB_GENERATE(winlinks, winlink, entry, winlink_cmp);
+RB_GENERATE(windows, window, entry, window_cmp);
 
-int
+static int
 winlink_cmp(struct winlink *wl1, struct winlink *wl2)
 {
 	return (wl1->idx - wl2->idx);
 }
 
-RB_GENERATE(window_pane_tree, window_pane, tree_entry, window_pane_cmp);
+RB_GENERATE(winlinks, winlink, entry, winlink_cmp);
 
-int
+static int
 window_pane_cmp(struct window_pane *wp1, struct window_pane *wp2)
 {
 	return (wp1->id - wp2->id);
 }
+
+RB_GENERATE(window_pane_tree, window_pane, tree_entry, window_pane_cmp);
 
 struct winlink *
 winlink_find_by_window(struct winlinks *wwl, struct window *w)

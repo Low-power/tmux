@@ -32,7 +32,6 @@
 struct kinfo_proc	*cmp_procs(struct kinfo_proc *, struct kinfo_proc *);
 char			*osdep_get_name(int, char *);
 char			*osdep_get_cwd(int);
-struct event_base	*osdep_event_init(void);
 
 #ifndef nitems
 #define nitems(_a) (sizeof((_a)) / sizeof((_a)[0]))
@@ -124,10 +123,4 @@ char *
 osdep_get_cwd(int fd)
 {
 	return (NULL);
-}
-
-struct event_base *
-osdep_event_init(void)
-{
-	return (event_init());
 }

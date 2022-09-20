@@ -197,8 +197,8 @@ imsg_get(struct imsgbuf *ibuf, struct imsg *imsg)
 }
 
 int
-imsg_compose(struct imsgbuf *ibuf, u_int32_t type, u_int32_t peerid,
-    pid_t pid, int fd, const void *data, u_int16_t datalen)
+imsg_compose(struct imsgbuf *ibuf, uint32_t type, uint32_t peerid,
+    pid_t pid, int fd, const void *data, uint16_t datalen)
 {
 	struct ibuf	*wbuf;
 
@@ -215,34 +215,10 @@ imsg_compose(struct imsgbuf *ibuf, u_int32_t type, u_int32_t peerid,
 	return (1);
 }
 
-int
-imsg_composev(struct imsgbuf *ibuf, u_int32_t type, u_int32_t peerid,
-    pid_t pid, int fd, const struct iovec *iov, int iovcnt)
-{
-	struct ibuf	*wbuf;
-	int		 i, datalen = 0;
-
-	for (i = 0; i < iovcnt; i++)
-		datalen += iov[i].iov_len;
-
-	if ((wbuf = imsg_create(ibuf, type, peerid, pid, datalen)) == NULL)
-		return (-1);
-
-	for (i = 0; i < iovcnt; i++)
-		if (imsg_add(wbuf, iov[i].iov_base, iov[i].iov_len) == -1)
-			return (-1);
-
-	wbuf->fd = fd;
-
-	imsg_close(ibuf, wbuf);
-
-	return (1);
-}
-
 /* ARGSUSED */
 struct ibuf *
-imsg_create(struct imsgbuf *ibuf, u_int32_t type, u_int32_t peerid,
-    pid_t pid, u_int16_t datalen)
+imsg_create(struct imsgbuf *ibuf, uint32_t type, uint32_t peerid,
+    pid_t pid, uint16_t datalen)
 {
 	struct ibuf	*wbuf;
 	struct imsg_hdr	 hdr;
@@ -314,15 +290,6 @@ imsg_get_fd(struct imsgbuf *ibuf)
 	free(ifd);
 
 	return (fd);
-}
-
-int
-imsg_flush(struct imsgbuf *ibuf)
-{
-	while (ibuf->w.queued)
-		if (msgbuf_write(&ibuf->w) <= 0)
-			return (-1);
-	return (0);
 }
 
 void

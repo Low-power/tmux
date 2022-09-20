@@ -215,7 +215,7 @@ main(int argc, char **argv)
 		flags = 0;
 
 	label = path = NULL;
-	while ((opt = getopt(argc, argv, "2c:Cdf:lL:qS:uUVv")) != -1) {
+	while ((opt = getopt(argc, argv, "+2c:Cdf:lL:qS:uUVv")) != -1) {
 		switch (opt) {
 		case '2':
 			flags |= CLIENT_256COLOURS;

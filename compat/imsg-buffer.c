@@ -99,82 +99,10 @@ ibuf_add(struct ibuf *buf, const void *data, size_t len)
 	return (0);
 }
 
-void *
-ibuf_reserve(struct ibuf *buf, size_t len)
-{
-	void	*b;
-
-	if (buf->wpos + len > buf->size)
-		if (ibuf_realloc(buf, len) == -1)
-			return (NULL);
-
-	b = buf->buf + buf->wpos;
-	buf->wpos += len;
-	return (b);
-}
-
-void *
-ibuf_seek(struct ibuf *buf, size_t pos, size_t len)
-{
-	/* only allowed to seek in already written parts */
-	if (pos + len > buf->wpos)
-		return (NULL);
-
-	return (buf->buf + pos);
-}
-
-size_t
-ibuf_size(struct ibuf *buf)
-{
-	return (buf->wpos);
-}
-
-size_t
-ibuf_left(struct ibuf *buf)
-{
-	return (buf->max - buf->wpos);
-}
-
 void
 ibuf_close(struct msgbuf *msgbuf, struct ibuf *buf)
 {
 	ibuf_enqueue(msgbuf, buf);
-}
-
-int
-ibuf_write(struct msgbuf *msgbuf)
-{
-	struct iovec	 iov[IOV_MAX];
-	struct ibuf	*buf;
-	unsigned int	 i = 0;
-	ssize_t	n;
-
-	memset(&iov, 0, sizeof(iov));
-	TAILQ_FOREACH(buf, &msgbuf->bufs, entry) {
-		if (i >= IOV_MAX)
-			break;
-		iov[i].iov_base = buf->buf + buf->rpos;
-		iov[i].iov_len = buf->wpos - buf->rpos;
-		i++;
-	}
-
-again:
-	if ((n = writev(msgbuf->fd, iov, i)) == -1) {
-		if (errno == EINTR)
-			goto again;
-		if (errno == ENOBUFS)
-			errno = EAGAIN;
-		return (-1);
-	}
-
-	if (n == 0) {			/* connection closed */
-		errno = 0;
-		return (0);
-	}
-
-	msgbuf_drain(msgbuf, n);
-
-	return (1);
 }
 
 void

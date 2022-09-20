@@ -44,7 +44,6 @@ const char	*cmd_find_map_table(const char *[][2], const char *);
 int	cmd_find_get_session(struct cmd_find_state *, const char *);
 int	cmd_find_get_window(struct cmd_find_state *, const char *);
 int	cmd_find_get_window_with_session(struct cmd_find_state *, const char *);
-int	cmd_find_get_window_with_pane(struct cmd_find_state *);
 int	cmd_find_get_pane(struct cmd_find_state *, const char *);
 int	cmd_find_get_pane_with_session(struct cmd_find_state *, const char *);
 int	cmd_find_get_pane_with_window(struct cmd_find_state *, const char *);
@@ -644,16 +643,6 @@ cmd_find_get_window_with_session(struct cmd_find_state *fs, const char *window)
 	}
 
 	return (-1);
-}
-
-/* Find window from given pane. Needs wp, fills in s and wl and w. */
-int
-cmd_find_get_window_with_pane(struct cmd_find_state *fs)
-{
-	log_debug("%s", __func__);
-
-	fs->w = fs->wp->window;
-	return (cmd_find_best_session_with_window(fs));
 }
 
 /* Find pane from string. Fills in s, wl, w, wp. */

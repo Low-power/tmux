@@ -35,7 +35,6 @@
 struct kinfo_proc2	*cmp_procs(struct kinfo_proc2 *, struct kinfo_proc2 *);
 char			*osdep_get_name(int, char *);
 char			*osdep_get_cwd(int);
-struct event_base	*osdep_event_init(void);
 
 struct kinfo_proc2 *
 cmp_procs(struct kinfo_proc2 *p1, struct kinfo_proc2 *p2)
@@ -128,10 +127,4 @@ char *
 osdep_get_cwd(int fd)
 {
 	return (NULL);
-}
-
-struct event_base *
-osdep_event_init(void)
-{
-	return (event_init());
 }

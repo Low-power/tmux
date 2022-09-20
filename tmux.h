@@ -1610,8 +1610,10 @@ void		 hooks_remove(struct hooks *, const char *);
 struct hook	*hooks_find(struct hooks *, const char *);
 int printflike(4, 5) hooks_run(struct hooks *, struct client *,
 		    struct cmd_find_state *, const char *, ...);
+#if 0
 int printflike(4, 5) hooks_wait(struct hooks *, struct cmd_q *,
 		    struct cmd_find_state *, const char *, ...);
+#endif
 
 /* mode-key.c */
 extern const struct mode_key_table mode_key_tables[];
@@ -1778,9 +1780,6 @@ void		tty_keys_free(struct tty *);
 key_code	tty_keys_next(struct tty *);
 
 /* arguments.c */
-int		 args_cmp(struct args_entry *, struct args_entry *);
-RB_PROTOTYPE(args_tree, args_entry, entry, args_cmp);
-struct args	*args_create(int, ...);
 struct args	*args_parse(const char *, int, char **);
 void		 args_free(struct args *);
 char		*args_print(struct args *);
@@ -1862,11 +1861,11 @@ void	cmd_wait_for_flush(void);
 int	client_main(struct event_base *, int, char **, int, const char *);
 
 /* key-bindings.c */
+static __attribute__((__unused__)) int key_table_cmp(struct key_table *, struct key_table *);
+static __attribute__((__unused__)) int key_bindings_cmp(struct key_binding *, struct key_binding *);
 RB_PROTOTYPE(key_bindings, key_binding, entry, key_bindings_cmp);
 RB_PROTOTYPE(key_tables, key_table, entry, key_table_cmp);
 extern struct key_tables key_tables;
-int	 key_table_cmp(struct key_table *, struct key_table *);
-int	 key_bindings_cmp(struct key_binding *, struct key_binding *);
 struct key_table *key_bindings_get_table(const char *, int);
 void	 key_bindings_unref_table(struct key_table *);
 void	 key_bindings_add(const char *, key_code, int, struct cmd_list *);
@@ -2097,11 +2096,11 @@ void	 screen_reflow(struct screen *, u_int);
 /* window.c */
 extern struct windows windows;
 extern struct window_pane_tree all_window_panes;
-int		 window_cmp(struct window *, struct window *);
+static __attribute__((__unused__)) int window_cmp(struct window *, struct window *);
 RB_PROTOTYPE(windows, window, entry, window_cmp);
-int		 winlink_cmp(struct winlink *, struct winlink *);
+static __attribute__((__unused__)) int winlink_cmp(struct winlink *, struct winlink *);
 RB_PROTOTYPE(winlinks, winlink, entry, winlink_cmp);
-int		 window_pane_cmp(struct window_pane *, struct window_pane *);
+static __attribute__((__unused__)) int window_pane_cmp(struct window_pane *, struct window_pane *);
 RB_PROTOTYPE(window_pane_tree, window_pane, tree_entry, window_pane_cmp);
 struct winlink	*winlink_find_by_index(struct winlinks *, int);
 struct winlink	*winlink_find_by_window(struct winlinks *, struct window *);
@@ -2335,7 +2334,6 @@ char		*utf8_padcstr(const char *, u_int);
 /* osdep-*.c */
 char		*osdep_get_name(int, char *);
 char		*osdep_get_cwd(int);
-struct event_base *osdep_event_init(void);
 
 /* log.c */
 void	log_add_level(void);

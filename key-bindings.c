@@ -17,23 +17,23 @@
  */
 
 #include <sys/types.h>
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "tmux.h"
 
-RB_GENERATE(key_bindings, key_binding, entry, key_bindings_cmp);
-RB_GENERATE(key_tables, key_table, entry, key_table_cmp);
 struct key_tables key_tables = RB_INITIALIZER(&key_tables);
 
+static
 int
 key_table_cmp(struct key_table *e1, struct key_table *e2)
 {
 	return (strcmp(e1->name, e2->name));
 }
 
+RB_GENERATE(key_tables, key_table, entry, key_table_cmp);
+
+static
 int
 key_bindings_cmp(struct key_binding *bd1, struct key_binding *bd2)
 {
@@ -43,6 +43,8 @@ key_bindings_cmp(struct key_binding *bd1, struct key_binding *bd2)
 		return (1);
 	return (0);
 }
+
+RB_GENERATE(key_bindings, key_binding, entry, key_bindings_cmp);
 
 struct key_table *
 key_bindings_get_table(const char *name, int create)
@@ -156,84 +158,84 @@ key_bindings_init(void)
 		"bind ! break-pane",
 		"bind '\"' split-window",
 		"bind '#' list-buffers",
-		"bind '$' command-prompt -I'#S' \"rename-session '%%'\"",
-		"bind % split-window -h",
-		"bind & confirm-before -p\"kill-window #W? (y/n)\" kill-window",
-		"bind \"'\" command-prompt -pindex \"select-window -t ':%%'\"",
-		"bind ( switch-client -p",
-		"bind ) switch-client -n",
-		"bind , command-prompt -I'#W' \"rename-window '%%'\"",
-		"bind - delete-buffer",
-		"bind . command-prompt \"move-window -t '%%'\"",
-		"bind 0 select-window -t:=0",
-		"bind 1 select-window -t:=1",
-		"bind 2 select-window -t:=2",
-		"bind 3 select-window -t:=3",
-		"bind 4 select-window -t:=4",
-		"bind 5 select-window -t:=5",
-		"bind 6 select-window -t:=6",
-		"bind 7 select-window -t:=7",
-		"bind 8 select-window -t:=8",
-		"bind 9 select-window -t:=9",
+		"bind-key -- '$' command-prompt -I '#S' \"rename-session '%%'\"",
+		"bind-key -- % split-window -h",
+		"bind-key -- & confirm-before -p \"kill-window #W? (y/n)\" kill-window",
+		"bind-key -- \"'\" command-prompt -p index \"select-window -t ':%%'\"",
+		"bind-key -- ( switch-client -p",
+		"bind-key -- ) switch-client -n",
+		"bind-key -- , command-prompt -I '#W' \"rename-window '%%'\"",
+		"bind-key -- - delete-buffer",
+		"bind-key -- . command-prompt \"move-window -t '%%'\"",
+		"bind-key -- 0 select-window -t :=0",
+		"bind-key -- 1 select-window -t :=1",
+		"bind-key -- 2 select-window -t :=2",
+		"bind-key -- 3 select-window -t :=3",
+		"bind-key -- 4 select-window -t :=4",
+		"bind-key -- 5 select-window -t :=5",
+		"bind-key -- 6 select-window -t :=6",
+		"bind-key -- 7 select-window -t :=7",
+		"bind-key -- 8 select-window -t :=8",
+		"bind-key -- 9 select-window -t :=9",
 		"bind : command-prompt",
 		"bind \\; last-pane",
 		"bind = choose-buffer",
 		"bind ? list-keys",
 		"bind D choose-client",
-		"bind L switch-client -l",
-		"bind M select-pane -M",
+		"bind-key -- L switch-client -l",
+		"bind-key -- M select-pane -M",
 		"bind [ copy-mode",
 		"bind ] paste-buffer",
 		"bind c new-window",
 		"bind d detach-client",
-		"bind f command-prompt \"find-window '%%'\"",
+		"bind-key -- f command-prompt \"find-window '%%'\"",
 		"bind i display-message",
 		"bind l last-window",
-		"bind m select-pane -m",
+		"bind-key -- m select-pane -m",
 		"bind n next-window",
-		"bind o select-pane -t:.+",
+		"bind-key -- o select-pane -t :.+",
 		"bind p previous-window",
 		"bind q display-panes",
 		"bind r refresh-client",
 		"bind s choose-tree",
 		"bind t clock-mode",
 		"bind w choose-window",
-		"bind x confirm-before -p\"kill-pane #P? (y/n)\" kill-pane",
-		"bind z resize-pane -Z",
-		"bind { swap-pane -U",
-		"bind } swap-pane -D",
-		"bind '~' show-messages",
-		"bind PPage copy-mode -u",
-		"bind -r Up select-pane -U",
-		"bind -r Down select-pane -D",
-		"bind -r Left select-pane -L",
-		"bind -r Right select-pane -R",
+		"bind-key -- x confirm-before -p \"kill-pane #P? (y/n)\" kill-pane",
+		"bind-key -- z resize-pane -Z",
+		"bind-key -- { swap-pane -U",
+		"bind-key -- } swap-pane -D",
+		"bind-key -- '~' show-messages",
+		"bind-key -- PPage copy-mode -u",
+		"bind-key -r -- Up select-pane -U",
+		"bind-key -r -- Down select-pane -D",
+		"bind-key -r -- Left select-pane -L",
+		"bind-key -r -- Right select-pane -R",
 		"bind M-1 select-layout even-horizontal",
 		"bind M-2 select-layout even-vertical",
 		"bind M-3 select-layout main-horizontal",
 		"bind M-4 select-layout main-vertical",
 		"bind M-5 select-layout tiled",
-		"bind M-n next-window -a",
-		"bind M-o rotate-window -D",
-		"bind M-p previous-window -a",
-		"bind -r M-Up resize-pane -U 5",
-		"bind -r M-Down resize-pane -D 5",
-		"bind -r M-Left resize-pane -L 5",
-		"bind -r M-Right resize-pane -R 5",
-		"bind -r C-Up resize-pane -U",
-		"bind -r C-Down resize-pane -D",
-		"bind -r C-Left resize-pane -L",
-		"bind -r C-Right resize-pane -R",
-		"bind -n MouseDown1Pane select-pane -t=\\; send-keys -M",
-		"bind -n MouseDrag1Border resize-pane -M",
-		"bind -n MouseDown1Status select-window -t=",
-		"bind -n WheelDownStatus next-window",
-		"bind -n WheelUpStatus previous-window",
-		"bind -n MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= \"#{pane_in_mode}\" \"copy-mode -M\" \"send-keys -M\"' 'copy-mode -M'",
-		"bind -n MouseDown3Pane if-shell -Ft= '#{mouse_any_flag}' 'select-pane -t=; send-keys -M' 'select-pane -mt='",
-		"bind -n WheelUpPane if-shell -Ft= '#{mouse_any_flag}' 'send-keys -M' 'if -Ft= \"#{pane_in_mode}\" \"send-keys -M\" \"copy-mode -et=\"'",
+		"bind-key -- M-n next-window -a",
+		"bind-key -- M-o rotate-window -D",
+		"bind-key -- M-p previous-window -a",
+		"bind-key -r -- M-Up resize-pane -U 5",
+		"bind-key -r -- M-Down resize-pane -D 5",
+		"bind-key -r -- M-Left resize-pane -L 5",
+		"bind-key -r -- M-Right resize-pane -R 5",
+		"bind-key -r -- C-Up resize-pane -U",
+		"bind-key -r -- C-Down resize-pane -D",
+		"bind-key -r -- C-Left resize-pane -L",
+		"bind-key -r -- C-Right resize-pane -R",
+		"bind-key -n -- MouseDown1Pane select-pane -t =\\; send-keys -M",
+		"bind-key -n -- MouseDrag1Border resize-pane -M",
+		"bind-key -n -- MouseDown1Status select-window -t =",
+		"bind-key -n -- WheelDownStatus next-window",
+		"bind-key -n -- WheelUpStatus previous-window",
+		"bind-key -n -- MouseDrag1Pane if -F -t = '#{mouse_any_flag}' 'if -F -t = \"#{pane_in_mode}\" \"copy-mode -M\" \"send-keys -M\"' 'copy-mode -M'",
+		"bind-key -n -- MouseDown3Pane if-shell -F -t = '#{mouse_any_flag}' 'select-pane -t =; send-keys -M' 'select-pane -m -t ='",
+		"bind-key -n -- WheelUpPane if-shell -F -t = '#{mouse_any_flag}' 'send-keys -M' 'if -F -t = \"#{pane_in_mode}\" \"send-keys -M\" \"copy-mode -e -t =\"'",
 	};
-	u_int		 i;
+	unsigned int	 i;
 	struct cmd_list	*cmdlist;
 	char		*cause;
 	int		 error;

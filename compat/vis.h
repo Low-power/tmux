@@ -80,6 +80,5 @@ int	strnvis(char *, const char *, size_t, int);
 int	strvisx(char *, const char *, size_t, int);
 int	strunvis(char *, const char *);
 int	unvis(char *, char, int *, int);
-ssize_t strnunvis(char *, const char *, size_t);
 
 #endif /* !_VIS_H_ */

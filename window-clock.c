@@ -213,13 +213,11 @@ window_clock_draw_screen(struct window_pane *wp)
 	t = time(NULL);
 	tm = localtime(&t);
 	if (style == 0) {
-		strftime(tim, sizeof tim, "%l:%M ", localtime(&t));
-		if (tm->tm_hour >= 12)
-			strlcat(tim, "PM", sizeof tim);
-		else
-			strlcat(tim, "AM", sizeof tim);
-	} else
+		size_t len = strftime(tim, sizeof tim, "%l:%M ", tm);
+		if(len < sizeof tim - 4) strcpy(tim + len, tm->tm_hour >= 12 ? "PM" : "AM");
+	} else {
 		strftime(tim, sizeof tim, "%H:%M", tm);
+	}
 
 	screen_write_clearscreen(&ctx);
 

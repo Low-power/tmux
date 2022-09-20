@@ -54,15 +54,14 @@ struct wait_channel {
 RB_HEAD(wait_channels, wait_channel);
 struct wait_channels wait_channels = RB_INITIALIZER(wait_channels);
 
-int	wait_channel_cmp(struct wait_channel *, struct wait_channel *);
-RB_PROTOTYPE(wait_channels, wait_channel, entry, wait_channel_cmp);
-RB_GENERATE(wait_channels, wait_channel, entry, wait_channel_cmp);
-
+static
 int
 wait_channel_cmp(struct wait_channel *wc1, struct wait_channel *wc2)
 {
 	return (strcmp(wc1->name, wc2->name));
 }
+
+RB_GENERATE_STATIC(wait_channels, wait_channel, entry, wait_channel_cmp);
 
 enum cmd_retval	cmd_wait_for_signal(struct cmd_q *, const char *,
 		    struct wait_channel *);

@@ -93,9 +93,3 @@ osdep_get_cwd(int fd)
 	}
 	return (NULL);
 }
-
-struct event_base *
-osdep_event_init(void)
-{
-	return (event_init());
-}

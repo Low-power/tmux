@@ -85,17 +85,17 @@ struct format_job {
 
 /* Format job tree. */
 struct event format_job_event;
-int	format_job_cmp(struct format_job *, struct format_job *);
 RB_HEAD(format_job_tree, format_job) format_jobs = RB_INITIALIZER();
-RB_PROTOTYPE(format_job_tree, format_job, entry, format_job_cmp);
-RB_GENERATE(format_job_tree, format_job, entry, format_job_cmp);
 
 /* Format job tree comparison function. */
+static
 int
 format_job_cmp(struct format_job *fj1, struct format_job *fj2)
 {
 	return (strcmp(fj1->cmd, fj2->cmd));
 }
+
+RB_GENERATE_STATIC(format_job_tree, format_job, entry, format_job_cmp);
 
 /* Format modifiers. */
 #define FORMAT_TIMESTRING 0x1
@@ -122,16 +122,16 @@ struct format_tree {
 
 	RB_HEAD(format_entry_tree, format_entry) tree;
 };
-int	format_entry_cmp(struct format_entry *, struct format_entry *);
-RB_PROTOTYPE(format_entry_tree, format_entry, entry, format_entry_cmp);
-RB_GENERATE(format_entry_tree, format_entry, entry, format_entry_cmp);
 
 /* Format entry tree comparison function. */
+static
 int
 format_entry_cmp(struct format_entry *fe1, struct format_entry *fe2)
 {
 	return (strcmp(fe1->key, fe2->key));
 }
+
+RB_GENERATE_STATIC(format_entry_tree, format_entry, entry, format_entry_cmp);
 
 /* Single-character uppercase aliases. */
 const char *format_upper[] = {

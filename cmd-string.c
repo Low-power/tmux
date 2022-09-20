@@ -31,24 +31,22 @@
  * Parse a command from a string.
  */
 
-int	 cmd_string_getc(const char *, size_t *);
-void	 cmd_string_ungetc(size_t *);
-void	 cmd_string_copy(char **, char *, size_t *);
-char	*cmd_string_string(const char *, size_t *, char, int);
-char	*cmd_string_variable(const char *, size_t *);
-char	*cmd_string_expand_tilde(const char *, size_t *);
+static void	 cmd_string_copy(char **, char *, size_t *);
+static char	*cmd_string_string(const char *, size_t *, char, int);
+static char	*cmd_string_variable(const char *, size_t *);
+static char	*cmd_string_expand_tilde(const char *, size_t *);
 
-int
+static int
 cmd_string_getc(const char *s, size_t *p)
 {
-	const u_char	*ucs = s;
+	const unsigned char *ucs = (const unsigned char *)s;
 
 	if (ucs[*p] == '\0')
 		return (EOF);
 	return (ucs[(*p)++]);
 }
 
-void
+static void
 cmd_string_ungetc(size_t *p)
 {
 	(*p)--;

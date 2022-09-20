@@ -566,6 +566,7 @@ first_key:
 	key = (u_char)*buf;
 	size = 1;
 
+#if 0
 	/*
 	 * Check for backspace key using termios VERASE - the terminfo
 	 * kbs entry is extremely unreliable, so cannot be safely
@@ -574,6 +575,7 @@ first_key:
 	bspace = tty->tio.c_cc[VERASE];
 	if (bspace != _POSIX_VDISABLE && key == bspace)
 		key = KEYC_BSPACE;
+#endif
 
 	goto complete_key;
 

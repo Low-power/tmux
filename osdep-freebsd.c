@@ -34,7 +34,6 @@
 struct kinfo_proc	*cmp_procs(struct kinfo_proc *, struct kinfo_proc *);
 char			*osdep_get_name(int, char *);
 char			*osdep_get_cwd(int);
-struct event_base	*osdep_event_init(void);
 
 #ifndef nitems
 #define nitems(_a) (sizeof((_a)) / sizeof((_a)[0]))
@@ -189,14 +188,3 @@ osdep_get_cwd(int fd)
 	return (osdep_get_cwd_fallback(fd));
 }
 #endif /* KERN_PROC_CWD */
-
-struct event_base *
-osdep_event_init(void)
-{
-	/*
-	 * On some versions of FreeBSD, kqueue doesn't work properly on tty
-	 * file descriptors. This is fixed in recent FreeBSD versions.
-	 */
-	setenv("EVENT_NOKQUEUE", "1", 1);
-	return (event_init());
-}

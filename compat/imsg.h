@@ -83,12 +83,7 @@ struct imsg {
 struct ibuf	*ibuf_open(size_t);
 struct ibuf	*ibuf_dynamic(size_t, size_t);
 int		 ibuf_add(struct ibuf *, const void *, size_t);
-void		*ibuf_reserve(struct ibuf *, size_t);
-void		*ibuf_seek(struct ibuf *, size_t, size_t);
-size_t		 ibuf_size(struct ibuf *);
-size_t		 ibuf_left(struct ibuf *);
 void		 ibuf_close(struct msgbuf *, struct ibuf *);
-int		 ibuf_write(struct msgbuf *);
 void		 ibuf_free(struct ibuf *);
 void		 msgbuf_init(struct msgbuf *);
 void		 msgbuf_clear(struct msgbuf *);
@@ -99,16 +94,13 @@ void		 msgbuf_drain(struct msgbuf *, size_t);
 void	 imsg_init(struct imsgbuf *, int);
 ssize_t	 imsg_read(struct imsgbuf *);
 ssize_t	 imsg_get(struct imsgbuf *, struct imsg *);
-int	 imsg_compose(struct imsgbuf *, u_int32_t, u_int32_t, pid_t,
-	    int, const void *, u_int16_t);
-int	 imsg_composev(struct imsgbuf *, u_int32_t, u_int32_t,  pid_t,
-	    int, const struct iovec *, int);
-struct ibuf *imsg_create(struct imsgbuf *, u_int32_t, u_int32_t, pid_t,
+int	 imsg_compose(struct imsgbuf *, uint32_t, uint32_t, pid_t,
+	    int, const void *, uint16_t);
+struct ibuf *imsg_create(struct imsgbuf *, uint32_t, uint32_t, pid_t,
 	    u_int16_t);
-int	 imsg_add(struct ibuf *, const void *, u_int16_t);
+int	 imsg_add(struct ibuf *, const void *, uint16_t);
 void	 imsg_close(struct imsgbuf *, struct ibuf *);
 void	 imsg_free(struct imsg *);
-int	 imsg_flush(struct imsgbuf *);
 void	 imsg_clear(struct imsgbuf *);
 
 #endif

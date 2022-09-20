@@ -272,22 +272,4 @@ int		 openat(int, const char *, int, ...);
 void		*reallocarray(void *, size_t, size_t size);
 #endif
 
-#ifdef HAVE_GETOPT
-#include <getopt.h>
-#else
-/* getopt.c */
-extern int	BSDopterr;
-extern int	BSDoptind;
-extern int	BSDoptopt;
-extern int	BSDoptreset;
-extern char    *BSDoptarg;
-int	BSDgetopt(int, char *const *, const char *);
-#define getopt(ac, av, o)  BSDgetopt(ac, av, o)
-#define opterr             BSDopterr
-#define optind             BSDoptind
-#define optopt             BSDoptopt
-#define optreset           BSDoptreset
-#define optarg             BSDoptarg
-#endif
-
 #endif /* COMPAT_H */
