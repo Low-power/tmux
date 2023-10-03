@@ -399,47 +399,8 @@ if test "x$found_reallocarray" = xyes; then
 fi
 AM_CONDITIONAL(NO_REALLOCARRAY, [test "x$found_reallocarray" = xno])
 
-# Look for getopt. glibc's getopt does not enforce argument order and the ways
-# of making it do so are stupid, so just use our own instead.
-AC_CHECK_FUNC(getopt, found_getopt=yes, found_getopt=no)
-if test "x$found_getopt" != xno; then	
-	AC_CHECK_DECLS(
-		[optarg, optind, optreset],
-		,
-		found_getopt=no,
-		[
-			#include <unistd.h>
-		]
-	)	
-	if test "x$found_getopt" != xno; then	
-		AC_MSG_CHECKING(if system getopt should be avoided)
-		if test "x$found_glibc" = xyes; then
-			found_getopt=no
-			AC_MSG_RESULT(yes)
-		else
-			AC_MSG_RESULT(no)
-			AC_DEFINE(HAVE_GETOPT)
-		fi
-	fi
-fi
-AM_CONDITIONAL(NO_GETOPT, [test "x$found_getopt" = xno])
-
-# Check for BSD-style integer types.
-AC_MSG_CHECKING(for BSD-style unsigned types)
-AC_COMPILE_IFELSE([AC_LANG_SOURCE(
-	[
-		#include <sys/types.h>
-		#ifdef HAVE_STDINT_H
-		#include <stdint.h>
-		#else
-		#include <inttypes.h>
-		#endif
-		int main(void)
-		{ u_int8_t u8; u_int16_t u16; u_int32_t u32; u_int64_t u64; }
-	])],
-	[AC_DEFINE(HAVE_BSD_TYPES) AC_MSG_RESULT(yes)],
-	AC_MSG_RESULT(no)
-)
+dnl AC_CHECK_FUNC(getopt, found_getopt=yes, found_getopt=no)
+AC_CHECK_DECLS([optreset], [], [], [#include <unistd.h>])
 
 # Look for a suitable queue.h.
 AC_CHECK_DECL(
