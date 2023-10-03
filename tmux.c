@@ -51,8 +51,8 @@ __dead void
 usage(void)
 {
 	fprintf(stderr,
-	    "usage: %s [-2CluvV] [-c shell-command] [-f file] [-L socket-name]\n"
-	    "            [-S socket-path] [command [flags]]\n",
+	    "usage: %s [-2CluvV] [-c <shell-command>] [-f <file>] [-L <socket-name>]\n"
+	    "            [-S <socket-path>] [<command> [<flags>]]\n",
 	    __progname);
 	exit(1);
 }
@@ -189,24 +189,21 @@ main(int argc, char **argv)
 	const char	*s;
 	int		 opt, flags, keys;
 
+	if (setlocale(LC_CTYPE, "") == NULL) {
+		fputs("invalid LC_ALL, LC_CTYPE or LANG\n", stderr);
+		return 1;
+	}
 #if 0
-	if (setlocale(LC_CTYPE, "en_US.UTF-8") == NULL) {
-#endif
-		if (setlocale(LC_CTYPE, "") == NULL) {
-			fputs("invalid LC_ALL, LC_CTYPE or LANG\n", stderr);
-			return 1;
-		}
-#if 0
-		s = nl_langinfo(CODESET);
-		if (strcasecmp(s, "UTF-8") != 0 &&
-		    strcasecmp(s, "UTF8") != 0) {
-			fprintf(stderr, "need UTF-8 locale (LC_CTYPE) but have %s\n", s);
-			return 1;
-		}
+	s = nl_langinfo(CODESET);
+	if (strcasecmp(s, "UTF-8") != 0 &&
+	    strcasecmp(s, "UTF8") != 0) {
+		fprintf(stderr, "need UTF-8 locale (LC_CTYPE) but have %s\n", s);
+		return 1;
 	}
 #endif
 
 	setlocale(LC_TIME, "");
+
 	tzset();
 
 	if (**argv == '-')
