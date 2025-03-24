@@ -1237,12 +1237,13 @@ window_copy_write_line(struct window_pane *wp, struct screen_write_ctx *ctx,
 		if (limit > screen_size_x(s) + 1)
 			limit = screen_size_x(s) + 1;
 		if (data->inputtype == WINDOW_COPY_NUMERICPREFIX) {
-			xoff = size = xsnprintf(hdr, limit,
+			xoff = size = snprintf(hdr, limit,
 			    "Repeat: %d", data->numprefix);
 		} else {
-			xoff = size = xsnprintf(hdr, limit,
+			xoff = size = snprintf(hdr, limit,
 			    "%s: %s", data->inputprompt, data->inputstr);
 		}
+		if(size >= limit) xoff = size = limit - 1;
 		screen_write_cursormove(ctx, 0, last);
 		screen_write_puts(ctx, &gc, "%s", hdr);
 	} else
