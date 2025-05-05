@@ -887,6 +887,12 @@ const struct options_table_entry options_table[] = {
 	  .default_num = 0
 	},
 
+	{ .name = "allow-bracket-paste",
+	  .type = OPTIONS_TABLE_FLAG,
+	  .scope = OPTIONS_TABLE_WINDOW,
+	  .default_num = 1
+	},
+
 	{ .name = NULL }
 };
 

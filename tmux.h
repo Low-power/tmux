@@ -1721,7 +1721,7 @@ int	tty_set_size(struct tty *, u_int, u_int);
 void	tty_start_tty(struct tty *);
 void	tty_stop_tty(struct tty *);
 void	tty_set_title(struct tty *, const char *);
-void	tty_update_mode(struct tty *, int, struct screen *);
+void	tty_update_mode(struct tty *, int, const struct window *, struct screen *);
 void	tty_force_cursor_colour(struct tty *, const char *);
 void	tty_draw_pane(struct tty *, const struct window_pane *, u_int, u_int,
 	    u_int);

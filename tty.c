@@ -562,7 +562,7 @@ tty_force_cursor_colour(struct tty *tty, const char *ccolour)
 }
 
 void
-tty_update_mode(struct tty *tty, int mode, struct screen *s)
+tty_update_mode(struct tty *tty, int mode, const struct window *w, struct screen *s)
 {
 	int	changed;
 
@@ -624,10 +624,13 @@ tty_update_mode(struct tty *tty, int mode, struct screen *s)
 			tty_putcode(tty, TTYC_RMKX);
 	}
 	if (changed & MODE_BRACKETPASTE) {
-		if (mode & MODE_BRACKETPASTE)
-			tty_puts(tty, "\033[?2004h");
-		else
+		if (mode & MODE_BRACKETPASTE) {
+			if(options_get_number(w->options, "allow-bracket-paste")) {
+				tty_puts(tty, "\033[?2004h");
+			}
+		} else {
 			tty_puts(tty, "\033[?2004l");
+		}
 	}
 	tty->mode = mode;
 }
@@ -722,6 +725,7 @@ void
 tty_draw_line(struct tty *tty, const struct window_pane *wp,
     struct screen *s, u_int py, u_int ox, u_int oy)
 {
+	const struct window	*w = wp ? wp->window : tty->client->session->curw->window;
 	struct grid_cell	 gc;
 	struct grid_line	*gl;
 	u_int			 i, sx;
@@ -729,7 +733,7 @@ tty_draw_line(struct tty *tty, const struct window_pane *wp,
 
 	flags = tty->flags & TTY_NOCURSOR;
 	tty->flags |= TTY_NOCURSOR;
-	tty_update_mode(tty, tty->mode, s);
+	tty_update_mode(tty, tty->mode, w, s);
 
 	sx = screen_size_x(s);
 	if (sx > s->grid->linedata[s->grid->hsize + py].cellsize)
@@ -773,7 +777,7 @@ tty_draw_line(struct tty *tty, const struct window_pane *wp,
 	}
 
 	tty->flags = (tty->flags & ~TTY_NOCURSOR) | flags;
-	tty_update_mode(tty, tty->mode, s);
+	tty_update_mode(tty, tty->mode, w, s);
 }
 
 int

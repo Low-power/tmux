@@ -887,7 +887,7 @@ server_client_reset_state(struct client *c)
 		mode = (mode & ~ALL_MOUSE_MODES) | MODE_MOUSE_BUTTON;
 
 	/* Set the terminal mode and reset attributes. */
-	tty_update_mode(&c->tty, mode, s);
+	tty_update_mode(&c->tty, mode, w, s);
 	tty_reset(&c->tty);
 }
 
@@ -928,7 +928,7 @@ server_client_check_redraw(struct client *c)
 {
 	struct session		*s = c->session;
 	struct tty		*tty = &c->tty;
-	struct window_pane	*wp;
+	struct window		*w = s->curw->window;
 	int		 	 flags, redraw;
 
 	if (c->flags & (CLIENT_CONTROL|CLIENT_SUSPENDED))
@@ -952,35 +952,37 @@ server_client_check_redraw(struct client *c)
 	tty->flags = (tty->flags & ~TTY_FREEZE) | TTY_NOCURSOR;
 
 	if (c->flags & CLIENT_REDRAW) {
-		tty_update_mode(tty, tty->mode, NULL);
+		tty_update_mode(tty, tty->mode, w, NULL);
 		screen_redraw_screen(c, 1, 1, 1);
 		c->flags &= ~(CLIENT_STATUS|CLIENT_BORDERS);
 	} else if (c->flags & CLIENT_REDRAWWINDOW) {
-		tty_update_mode(tty, tty->mode, NULL);
-		TAILQ_FOREACH(wp, &c->session->curw->window->panes, entry)
+		struct window_pane *wp;
+		tty_update_mode(tty, tty->mode, w, NULL);
+		TAILQ_FOREACH(wp, &w->panes, entry)
 			screen_redraw_pane(c, wp);
 		c->flags &= ~CLIENT_REDRAWWINDOW;
 	} else {
-		TAILQ_FOREACH(wp, &c->session->curw->window->panes, entry) {
+		struct window_pane *wp;
+		TAILQ_FOREACH(wp, &w->panes, entry) {
 			if (wp->flags & PANE_REDRAW) {
-				tty_update_mode(tty, tty->mode, NULL);
+				tty_update_mode(tty, tty->mode, w, NULL);
 				screen_redraw_pane(c, wp);
 			}
 		}
 	}
 
 	if (c->flags & CLIENT_BORDERS) {
-		tty_update_mode(tty, tty->mode, NULL);
+		tty_update_mode(tty, tty->mode, w, NULL);
 		screen_redraw_screen(c, 0, 0, 1);
 	}
 
 	if (c->flags & CLIENT_STATUS) {
-		tty_update_mode(tty, tty->mode, NULL);
+		tty_update_mode(tty, tty->mode, w, NULL);
 		screen_redraw_screen(c, 0, 1, 0);
 	}
 
 	tty->flags = (tty->flags & ~(TTY_FREEZE|TTY_NOCURSOR)) | flags;
-	tty_update_mode(tty, tty->mode, NULL);
+	tty_update_mode(tty, tty->mode, w, NULL);
 
 	c->flags &= ~(CLIENT_REDRAW|CLIENT_BORDERS|CLIENT_STATUS|
 	    CLIENT_STATUSFORCE);
