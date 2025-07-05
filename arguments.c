@@ -24,6 +24,11 @@
 
 #include "tmux.h"
 
+#if defined __sun && defined __SVR4
+#include <getopt.h>
+#define getopt(ARGC,ARGV,OPTS) getopt_long((ARGC),(ARGV),(OPTS),NULL,NULL)
+#endif
+
 /*
  * Manipulate command arguments.
  */
