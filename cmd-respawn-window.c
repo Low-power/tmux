@@ -33,7 +33,7 @@ const struct cmd_entry cmd_respawn_window_entry = {
 	.name = "respawn-window",
 	.alias = "respawnw",
 
-	.args = { "kt:", 0, -1 },
+	.args = { "+kt:", 0, -1 },
 	.usage = "[-k] " CMD_TARGET_WINDOW_USAGE " [command]",
 
 	.tflag = CMD_WINDOW,

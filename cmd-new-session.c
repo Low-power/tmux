@@ -39,7 +39,7 @@ const struct cmd_entry cmd_new_session_entry = {
 	.name = "new-session",
 	.alias = "new",
 
-	.args = { "Ac:dDEF:n:Ps:t:x:y:", 0, -1 },
+	.args = { "+Ac:dDEF:n:Ps:t:x:y:", 0, -1 },
 	.usage = "[-AdDEP] [-c start-directory] [-F format] [-n window-name] "
 		 "[-s session-name] " CMD_TARGET_SESSION_USAGE " [-x width] "
 		 "[-y height] [command]",

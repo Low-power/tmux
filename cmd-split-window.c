@@ -38,7 +38,7 @@ const struct cmd_entry cmd_split_window_entry = {
 	.name = "split-window",
 	.alias = "splitw",
 
-	.args = { "bc:dF:l:hp:Pt:v", 0, -1 },
+	.args = { "+bc:dF:l:hp:Pt:v", 0, -1 },
 	.usage = "[-bdhvP] [-c start-directory] [-F format] "
 		 "[-p percentage|-l size] " CMD_TARGET_PANE_USAGE " [command]",
 

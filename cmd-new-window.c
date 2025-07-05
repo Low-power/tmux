@@ -38,7 +38,7 @@ const struct cmd_entry cmd_new_window_entry = {
 	.name = "new-window",
 	.alias = "neww",
 
-	.args = { "ac:dF:kn:Pt:", 0, -1 },
+	.args = { "+ac:dF:kn:Pt:", 0, -1 },
 	.usage = "[-adkP] [-c start-directory] [-F format] [-n window-name] "
 		 CMD_TARGET_WINDOW_USAGE " [command]",
 
