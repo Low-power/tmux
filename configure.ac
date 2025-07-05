@@ -87,12 +87,10 @@ AC_MSG_RESULT($found_glibc)
 AC_CHECK_HEADERS(
 	[ \
 		bitstring.h \
-		curses.h \
 		dirent.h \
 		fcntl.h \
 		inttypes.h \
 		libutil.h \
-		ncurses.h \
 		ndir.h \
 		paths.h \
 		pty.h \
@@ -100,7 +98,6 @@ AC_CHECK_HEADERS(
 		sys/dir.h \
 		sys/ndir.h \
 		sys/tree.h \
-		term.h \
 		util.h \
 	]
 )
@@ -165,6 +162,14 @@ PKG_CHECK_MODULES(
 if test "x$found_curses" = xno; then
 	AC_MSG_ERROR("curses not found")
 fi
+
+AC_CHECK_HEADERS(
+	[ \
+		curses.h \
+		ncurses.h \
+		term.h
+	]
+)
 
 # Look for utempter.
 AC_ARG_ENABLE(
