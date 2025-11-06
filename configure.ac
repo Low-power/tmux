@@ -232,8 +232,7 @@ AM_CONDITIONAL(NO_B64_NTOP, [test "x$found_b64_ntop" = xno])
 
 # Look for networking libraries.
 AC_SEARCH_LIBS(inet_ntoa, nsl)
-AC_SEARCH_LIBS(socket, socket)
-AC_CHECK_LIB(xnet, socket)
+AC_SEARCH_LIBS(socket, [socket xnet])
 
 # Check for CMSG_DATA. Some platforms require _XOPEN_SOURCE_EXTENDED (for
 # example see xopen_networking(7) on HP-UX).
